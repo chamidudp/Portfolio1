@@ -619,7 +619,7 @@
       </div>
     </section><!-- End Testimonials Section -->
 
-
+<!-- ======= Contact script Section ======= -->
     <script>
       document.querySelector('.php-email-form').addEventListener('submit', function(event) {
           event.preventDefault(); // Prevent the default form submission
@@ -661,7 +661,48 @@
               document.querySelector('.error-message').style.display = 'block';
           });
       });
+      fetch('https://formspree.io/f/moqgojoj', {
+    method: 'POST',
+    body: formData,
+    headers: {
+        'Accept': 'application/json'
+    }
+})
+.then(response => {
+    document.querySelector('.loading').style.display = 'none';
+    if (response.ok) {
+        // Form submission successful
+        response.json().then(data => {
+            if (data.ok && data.next) {
+                window.location.href = data.next; // Redirect to the next URL
+            } else {
+                // Handle invalid response
+                console.error("Invalid response format");
+            }
+        });
+    } else {
+        // Handle form submission failure
+        return response.json().then(data => {
+            // Display error message
+            if (data.errors) {
+                document.querySelector('.error-message').innerText = data.errors.join(", ");
+            } else {
+                document.querySelector('.error-message').innerText = 'Oops! There was a problem submitting your form';
+            }
+            document.querySelector('.error-message').style.display = 'block';
+        });
+    }
+})
+.catch(error => {
+    // Handle fetch error
+    document.querySelector('.loading').style.display = 'none';
+    document.querySelector('.error-message').innerText = 'Oops! There was a problem submitting your form';
+    document.querySelector('.error-message').style.display = 'block';
+});
+
       </script>
+
+      
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
